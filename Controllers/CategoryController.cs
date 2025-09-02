@@ -12,6 +12,7 @@ namespace E_CommerceSystem.Controllers
         private readonly ICategoryService _categoryService;
         private readonly IMapper _mapper;
 
+
         public CategoryController(ICategoryService categoryService, IMapper mapper)
         {
             _categoryService = categoryService;
@@ -63,5 +64,7 @@ namespace E_CommerceSystem.Controllers
             _categoryService.DeleteCategory(id);
             return Ok();
         }
+
+
     }
 }
