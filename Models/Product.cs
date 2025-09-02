@@ -24,16 +24,20 @@ namespace E_CommerceSystem.Models
 
         public decimal OverallRating { get; set; }
 
-        [JsonIgnore]
-        public virtual ICollection<OrderProducts> OrderProducts { get;set; }
-
-        [JsonIgnore]
-        public virtual ICollection<Review> Reviews { get; set; }
-
         [ForeignKey("supplier")]
         public int SupplierId { get; set; }
 
         [JsonIgnore]
         public Supplier supplier { get; set; }
+
+        [ForeignKey("category")]
+        public int CategoryId { get; set; }
+        [JsonIgnore]
+        public Category category { get; set; }
+        [JsonIgnore]
+        public virtual ICollection<OrderProducts> OrderProducts { get; set; }
+
+        [JsonIgnore]
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

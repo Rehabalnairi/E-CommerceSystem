@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace E_CommerceSystem.Models
@@ -13,6 +14,7 @@ namespace E_CommerceSystem.Models
 
         public string Description { get; set; }
 
+        
         // Relationship: One Category → Many Products
         [JsonIgnore]
         public virtual ICollection<Product> Products { get; set; }
