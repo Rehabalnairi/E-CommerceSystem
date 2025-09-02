@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace E_CommerceSystem.Models
@@ -28,5 +29,11 @@ namespace E_CommerceSystem.Models
 
         [JsonIgnore]
         public virtual ICollection<Review> Reviews { get; set; }
+
+        [ForeignKey("supplier")]
+        public int SupplierId { get; set; }
+
+        [JsonIgnore]
+        public Supplier supplier { get; set; }
     }
 }
