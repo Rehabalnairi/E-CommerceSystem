@@ -35,6 +35,8 @@ namespace E_CommerceSystem
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                  options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            //Mapping profile
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             // Add JWT Authentication
             var jwtSettings = builder.Configuration.GetSection("JwtSettings");
