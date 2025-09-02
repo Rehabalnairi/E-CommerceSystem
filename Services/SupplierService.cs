@@ -74,5 +74,29 @@ namespace E_CommerceSystem.Services
 
             _supplierRepo.DeleteSupplier(supplierId);
         }
+
+        public IEnumerable<SupplierDTO> GetAllSuppliersDTO(int pageNumber, int pageSize, string? name = null)
+        {
+            var query = _supplierRepo.GetAllSuppliers();
+
+            if (!string.IsNullOrEmpty(name))
+                query = query.Where(s => s.SupplierName.Contains(name, StringComparison.OrdinalIgnoreCase));
+
+            var pagedSuppliers = query
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(s => new SupplierDTO
+                {
+                    SupplierId = s.SupplierId,
+                    SupplierName = s.SupplierName,
+                    ContactEmail = s.ContactEmail,
+                    Phone = s.Phone,
+                    ProductCount = s.Products?.Count ?? 0
+                })
+                .ToList();
+
+            return pagedSuppliers;
+        }
+
     }
 }

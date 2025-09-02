@@ -10,25 +10,11 @@ namespace E_CommerceSystem.Controllers;
 [Route("api/[Controller]")]
 public class SupplierController : ControllerBase
 {
-    private readonly SupplierService _supplierService;
+    private readonly ISupplierService _supplierService;
 
-    public SupplierController(SupplierService supplierService)
+    public SupplierController(ISupplierService supplierService)
     {
         _supplierService = supplierService;
-    }
-
-    [HttpGet("GetAll")]
-    public IActionResult GetAll(int pageNumber = 1, int pageSize = 10, string? name = null)
-    {
-        try
-        {
-            var suppliers = _supplierService.GetAllSuppliers(pageNumber, pageSize, name);
-            return Ok(suppliers);
-        }
-        catch (Exception ex)
-        {
-            return StatusCode(500, $"An error occurred while retrieving suppliers. {ex.Message}");
-        }
     }
 
     [HttpGet("GetById/{id}")]
@@ -37,7 +23,15 @@ public class SupplierController : ControllerBase
         try
         {
             var supplier = _supplierService.GetSupplierById(id);
-            return Ok(supplier);
+            var dto = new SupplierDTO
+            {
+                SupplierId = supplier.SupplierId,
+                SupplierName = supplier.SupplierName,
+                ContactEmail = supplier.ContactEmail,
+                Phone = supplier.Phone,
+                ProductCount = supplier.Products?.Count ?? 0
+            };
+            return Ok(dto);
         }
         catch (KeyNotFoundException ex)
         {
@@ -55,7 +49,15 @@ public class SupplierController : ControllerBase
         try
         {
             var supplier = _supplierService.GetSupplierByName(name);
-            return Ok(supplier);
+            var dto = new SupplierDTO
+            {
+                SupplierId = supplier.SupplierId,
+                SupplierName = supplier.SupplierName,
+                ContactEmail = supplier.ContactEmail,
+                Phone = supplier.Phone,
+                ProductCount = supplier.Products?.Count ?? 0
+            };
+            return Ok(dto);
         }
         catch (KeyNotFoundException ex)
         {
@@ -66,6 +68,7 @@ public class SupplierController : ControllerBase
             return StatusCode(500, $"An error occurred while retrieving the supplier. {ex.Message}");
         }
     }
+
     [HttpPost("Add")]
     public IActionResult Add([FromBody] Supplier supplier)
     {
@@ -75,7 +78,17 @@ public class SupplierController : ControllerBase
                 return BadRequest("Supplier data is required");
 
             _supplierService.AddSupplier(supplier);
-            return Ok(supplier);
+
+            var dto = new SupplierDTO
+            {
+                SupplierId = supplier.SupplierId,
+                SupplierName = supplier.SupplierName,
+                ContactEmail = supplier.ContactEmail,
+                Phone = supplier.Phone,
+                ProductCount = supplier.Products?.Count ?? 0
+            };
+
+            return Ok(dto);
         }
         catch (InvalidOperationException ex)
         {
@@ -100,7 +113,17 @@ public class SupplierController : ControllerBase
                 return BadRequest("Supplier data is required");
 
             _supplierService.UpdateSupplier(supplier);
-            return Ok(supplier);
+
+            var dto = new SupplierDTO
+            {
+                SupplierId = supplier.SupplierId,
+                SupplierName = supplier.SupplierName,
+                ContactEmail = supplier.ContactEmail,
+                Phone = supplier.Phone,
+                ProductCount = supplier.Products?.Count ?? 0
+            };
+
+            return Ok(dto);
         }
         catch (KeyNotFoundException ex)
         {

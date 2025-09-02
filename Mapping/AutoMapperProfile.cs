@@ -13,5 +13,11 @@ public class AutoMapperProfile : Profile
         // Product
         CreateMap<Product, ProductDTO>().ReverseMap();
         CreateMap<ProductDTO, Product>();
+
+        // Supplier
+        CreateMap<Supplier, SupplierDTO>().ReverseMap();
+        CreateMap<SupplierDTO, Supplier>();
+
+
     }
 }
