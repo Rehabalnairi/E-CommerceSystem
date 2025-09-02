@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace E_CommerceSystem.Models
 {
@@ -15,8 +16,10 @@ namespace E_CommerceSystem.Models
         public string ContactEmail { get; set; }
 
         [Required]
+        [RegularExpression(@"^\d{8,15}$", ErrorMessage = "Phone number must be between 8 and 15 digits.")]
         public string Phone { get; set; }
 
-
+        [JsonIgnore]
+        public virtual ICollection<Product> Products { get; set; }
     }
 }
