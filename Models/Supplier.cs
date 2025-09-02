@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace E_CommerceSystem.Models
 {
@@ -17,6 +18,7 @@ namespace E_CommerceSystem.Models
         [Required]
         public string Phone { get; set; }
 
-
+        [JsonIgnore]
+        public virtual ICollection<Product> Products { get; set; }
     }
 }
