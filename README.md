@@ -213,7 +213,45 @@ Calculates the average rating of all reviews for a product.
 Updates the product’s OverallRating property.
 
 Note :all this servers with interfaces in IServices .
-*****************************************
+
+----------------------------------------------------------
+DbContext:
+this class use between C# and database like bridge
+DbSet: represents a table in the database (User table, Product table, Order table, Review table, OrderProducts table)
+OnModelCreating:
+On the User entity, the Email property must have a unique index
+
+------------------------------------------------------------
+Controllers :
+Handles API endpoints for managing orders. 
+Requires user authentication via JWT
+ there are 4 controllers:
+-UserController:
+POST /Register → Registers a new user.
+GET /Login → Authenticates a user and returns a JWT token.
+GET /GetUserById/{UserID} → Retrieves user information by ID.
+
+-ProductController
+-POST /AddProduct → Adds a product (admin-only).
+-PUT /UpdateProduct/{productId} → Updates product details (admin-only).
+-GET /GetAllProducts → Lists all products with optional filtering and pagination (public).
+-GET /GetProductByID/{ProductId} → Retrieves a single product (public).
+-OrderController
+
+-POST /PlaceOrder → Places an order for the authenticated user.
+-GET /GetAllOrders → Retrieves all orders of the logged-in user.
+-GET /GetOrderById/{OrderId} → Retrieves a specific order for the logged-in user.
+
+- ReviewControlle 
+-POST /AddReview → Adds a review for a product (authenticated user).
+-PUT /UpdateReview/{ReviewId} → Updates a review (only by owner).
+-DELETE /DeleteReview/{ReviewId} → Deletes a review (only by owner).
+-GET /GetAllReviews → Lists reviews for a product with pagination (public)
+
+
+
+
+
 
 
 
