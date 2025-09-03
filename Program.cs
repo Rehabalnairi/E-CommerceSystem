@@ -40,10 +40,11 @@ namespace E_CommerceSystem
             builder.Services.AddScoped<ICategoryService, CategoryService>();
 
             builder.Services.AddScoped<IInvoiceService, InvoiceService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-            //Mapping profile
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 
             // Add JWT Authentication
