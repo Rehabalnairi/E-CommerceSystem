@@ -10,6 +10,8 @@ namespace E_CommerceSystem.Services
         User GetUSer(string email, string password);
         User GetUserById(int uid);
         void UpdateUser(User user);
-        User? GetUserByUsername(string username);
+        User GetUserByUsername(string username);
+        RefreshToken GenerateRefreshToken(User user);
+        User ValidateRefreshToken(string token);
     }
 }
