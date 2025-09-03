@@ -7,6 +7,7 @@
         public decimal TotalAmount { get; set; }
         public string UName { get; set; }
         public List<OrderItemDTO> Items { get; set; }
+        public string Status { get; set; }
     }
 
     public class OrderProductDTO

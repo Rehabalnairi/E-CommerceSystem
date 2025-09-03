@@ -92,6 +92,16 @@ namespace E_CommerceSystem.Services
             return order;
         }
 
+        public void UpdateOrderStatus(int orderId, OrderStatus status)
+        {
+            var order = _orderRepo.GetOrderById(orderId);
+            if (order == null)
+                throw new KeyNotFoundException($"Order with ID {orderId} not found.");
+
+            order.Status = status;
+            _orderRepo.UpdateOrder(order);
+        }
+
         public void DeleteOrder(int oid)
         {
             var order = _orderRepo.GetOrderById(oid);

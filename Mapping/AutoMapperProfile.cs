@@ -21,7 +21,8 @@ public class AutoMapperProfile : Profile
         CreateMap<Order, OrderSummaryDTO>()
         .ForMember(dest => dest.OID, opt => opt.MapFrom(src => src.OID))
         .ForMember(dest => dest.UName, opt => opt.MapFrom(src => src.user.UName))
-        .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.OrderProducts));
+        .ForMember(dest => dest.Items, opt => opt.MapFrom(src => src.OrderProducts))
+        .ForMember(dest => dest.Status, opt => opt.MapFrom(src => src.Status.ToString())); ;
 
         CreateMap<OrderProducts, OrderItemDTO>()
             .ForMember(dest => dest.ProductId, opt => opt.MapFrom(src => src.PID))
