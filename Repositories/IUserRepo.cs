@@ -10,5 +10,8 @@ namespace E_CommerceSystem.Repositories
         User GetUSer(string email, string password);
         User GetUserById(int uid);
         void UpdateUser(User user);
+        void AddRefreshToken(RefreshToken token);
+        RefreshToken GetRefreshToken(string token);
+
     }
 }

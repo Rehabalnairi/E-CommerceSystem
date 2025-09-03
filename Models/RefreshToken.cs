@@ -10,7 +10,9 @@ namespace E_CommerceSystem.Models
         public DateTime Expires { get; set; }
         public bool IsRevoked { get; set; } = false;
 
-        public int UserId { get; set; }
+        public int UID { get; set; }
         public User User { get; set; }
+        public DateTime Created { get; set; }
+        public bool IsExpired => DateTime.UtcNow >= Expires;
     }
 }

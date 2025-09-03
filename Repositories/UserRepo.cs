@@ -109,5 +109,17 @@ namespace E_CommerceSystem.Repositories
                 throw new InvalidOperationException($"Database error: {ex.Message}");
             }
         }
+
+        public void AddRefreshToken(RefreshToken token)
+        {
+            _context.RefreshTokens.Add(token);
+            _context.SaveChanges();
+      
+        }
+
+        public RefreshToken? GetRefreshToken(string token)
+        {
+            return _context.RefreshTokens.FirstOrDefault(r => r.Token == token && !r.IsRevoked);
+        }
     }
 }

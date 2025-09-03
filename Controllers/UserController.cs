@@ -16,10 +16,13 @@ namespace E_CommerceSystem.Controllers
     {
         private readonly IUserService _userService;
         private readonly IConfiguration _configuration;
+        private readonly IAuthService _authService;
+
 
         public UserController(IUserService userService, IConfiguration configuration)
         {
             _userService = userService;
+            _authService = _authService;
             _configuration = configuration;
         }
 
@@ -116,6 +119,27 @@ namespace E_CommerceSystem.Controllers
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        //for refresh token
+
+        [AllowAnonymous]
+        [HttpPost("refresh-token")]
+        public IActionResult RefreshToken([FromBody] string refreshToken)
+        {
+            var user = _authService.ValidateRefreshToken(refreshToken); // ✅ من AuthService
+            if (user == null)
+                return Unauthorized("Invalid refresh token");
+
+            var newJwt = _authService.GenerateJwtToken(user);          // ✅ من AuthService
+            var newRefreshToken = _authService.GenerateRefreshToken(user); // ✅ من AuthService
+
+            return Ok(new
+            {
+                Token = newJwt,
+                RefreshToken = newRefreshToken.Token
+            });
+        }
+
 
 
     }
