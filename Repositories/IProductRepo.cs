@@ -9,5 +9,6 @@ namespace E_CommerceSystem.Repositories
         Product GetProductById(int pid);
         void UpdateProduct(Product product);
         Product GetProductByName(string productName);
+
     }
 }

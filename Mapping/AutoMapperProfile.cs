@@ -19,5 +19,6 @@ public class AutoMapperProfile : Profile
         CreateMap<SupplierDTO, Supplier>();
 
 
+
     }
 }

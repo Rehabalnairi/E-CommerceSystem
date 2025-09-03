@@ -1,11 +1,12 @@
 ﻿using E_CommerceSystem.Models;
-using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_CommerceSystem.Repositories
 {
     public class ProductRepo : IProductRepo
     {
-        public ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
+
         public ProductRepo(ApplicationDbContext context)
         {
             _context = context;
@@ -15,7 +16,7 @@ namespace E_CommerceSystem.Repositories
         {
             try
             {
-                return _context.Products.ToList();
+                return _context.Products.AsNoTracking();
             }
             catch (Exception ex)
             {
@@ -27,7 +28,9 @@ namespace E_CommerceSystem.Repositories
         {
             try
             {
-                return _context.Products.FirstOrDefault(p => p.PID == pid);
+                return _context.Products
+                               .AsNoTracking()
+                               .FirstOrDefault(p => p.PID == pid);
             }
             catch (Exception ex)
             {
@@ -61,17 +64,18 @@ namespace E_CommerceSystem.Repositories
             }
         }
 
-        public Product GetProductByName( string productName)
+        public Product GetProductByName(string productName)
         {
             try
             {
-                return _context.Products.FirstOrDefault(p => p.ProductName == productName);
+                return _context.Products
+                               .AsNoTracking()
+                               .FirstOrDefault(p => p.ProductName.ToLower() == productName.ToLower());
             }
             catch (Exception ex)
             {
                 throw new InvalidOperationException($"Database error: {ex.Message}");
             }
-           
         }
     }
 }
