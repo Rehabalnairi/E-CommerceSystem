@@ -16,7 +16,11 @@ namespace E_CommerceSystem.Repositories
         {
             try
             {
-                return _context.Orders.ToList();
+                return _context.Orders
+                    .Include(o => o.user)
+                    .Include(o => o.OrderProducts)
+                        .ThenInclude(op => op.product)
+                    .ToList();
             }
             catch (Exception ex)
             {
@@ -28,7 +32,11 @@ namespace E_CommerceSystem.Repositories
         {
             try
             {
-                return _context.Orders.FirstOrDefault(o => o.OID == oid);
+                return _context.Orders
+                .Include(o => o.user)
+                .Include(o => o.OrderProducts)
+                    .ThenInclude(op => op.product)
+                .FirstOrDefault(o => o.OID == oid);
             }
             catch (Exception ex)
             {
@@ -40,7 +48,12 @@ namespace E_CommerceSystem.Repositories
         {
             try
             {
-                return _context.Orders.Where(o => o.UID == uid).ToList();
+                return _context.Orders
+                .Include(o => o.user)
+                .Include(o => o.OrderProducts)
+                    .ThenInclude(op => op.product)
+                .Where(o => o.UID == uid)
+                .ToList();
             }
             catch (Exception ex)
             {
