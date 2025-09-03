@@ -1,11 +1,15 @@
 ﻿using E_CommerceSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_CommerceSystem.Repositories
 {
     public interface IOrderProductsRepo
     {
-        void AddOrderProducts(OrderProducts product);
+        void AddOrderProducts(OrderProducts orderProduct);
         IEnumerable<OrderProducts> GetAllOrders();
         List<OrderProducts> GetOrdersByOrderId(int oid);
+       
+
+
     }
 }

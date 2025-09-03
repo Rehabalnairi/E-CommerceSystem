@@ -1,39 +1,30 @@
 ﻿using System.Net;
 using System.Net.Mail;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 
 namespace E_CommerceSystem.Services
 {
     public class EmailService : IEmailService
     {
-        private readonly IConfiguration _configuration;
-
-        public EmailService(IConfiguration configuration)
+        public void SendEmail(string toEmail, string subject, string body)
         {
-            _configuration = configuration;
-        }
-
-        public async Task SendEmailAsync(string toEmail, string subject, string body)
-        {
-            var emailSettings = _configuration.GetSection("EmailSettings");
-            string fromEmail = emailSettings["FromEmail"];
-            string smtpServer = emailSettings["SmtpServer"];
-            int port = int.Parse(emailSettings["Port"]);
-            string password = emailSettings["Password"];
-
-            using var client = new SmtpClient(smtpServer, port)
+          
+            var smtpClient = new SmtpClient("smtp.example.com")
             {
-                Credentials = new NetworkCredential(fromEmail, password),
-                EnableSsl = true
+                Port = 587,
+                Credentials = new NetworkCredential("your-email@example.com", "password"),
+                EnableSsl = true,
             };
 
-            var mailMessage = new MailMessage(fromEmail, toEmail, subject, body)
+            var mailMessage = new MailMessage
             {
-                IsBodyHtml = true
+                From = new MailAddress("your-email@example.com"),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true,
             };
+            mailMessage.To.Add(toEmail);
 
-            await client.SendMailAsync(mailMessage);
+            smtpClient.Send(mailMessage);
         }
     }
 }
