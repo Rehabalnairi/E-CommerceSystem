@@ -41,5 +41,8 @@ namespace E_CommerceSystem.Models
         public virtual ICollection<Review> Reviews { get; set; }
 
         public string ImageUrl { get; set; }
+
+        [Timestamp]  
+        public byte[] RowVersion { get; set; }
     }
 }

@@ -12,7 +12,7 @@ namespace E_CommerceSystem.Repositories
         void UpdateUser(User user);
         void AddRefreshToken(RefreshToken token);
         RefreshToken GetRefreshToken(string token);
-
+        void DeleteRefreshToken(string token);
         User? GetUserByUsername(string username);
     }
 }

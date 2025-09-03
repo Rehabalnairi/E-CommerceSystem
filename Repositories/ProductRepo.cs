@@ -58,6 +58,12 @@ namespace E_CommerceSystem.Repositories
                 _context.Products.Update(product);
                 _context.SaveChanges();
             }
+
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new InvalidOperationException("This product was updated by another user. Please refresh and try again.");
+            }
+
             catch (Exception ex)
             {
                 throw new InvalidOperationException($"Database error: {ex.Message}");

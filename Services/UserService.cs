@@ -103,6 +103,19 @@ namespace E_CommerceSystem.Services
             return _userRepo.GetUserById(refreshToken.UID);
         }
 
+
+        public void SaveRefreshToken(int userId, string token, DateTime expires)
+        {
+            var refreshToken = new RefreshToken
+            {
+                UID = userId, 
+                Token = token,
+                Expires = expires,
+                Created = DateTime.UtcNow
+            };
+
+            _userRepo.AddRefreshToken(refreshToken);
+        }
     }
 }
 

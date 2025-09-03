@@ -1,4 +1,5 @@
 ﻿using E_CommerceSystem.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_CommerceSystem.Repositories
 {
@@ -113,18 +114,29 @@ namespace E_CommerceSystem.Repositories
         public void AddRefreshToken(RefreshToken token)
         {
             _context.RefreshTokens.Add(token);
-            _context.SaveChanges();
-      
+            _context.SaveChanges(); 
         }
 
         public RefreshToken? GetRefreshToken(string token)
         {
-            return _context.RefreshTokens.FirstOrDefault(r => r.Token == token && !r.IsRevoked);
+            return _context.RefreshTokens
+                .Include(rt => rt.User)
+                .FirstOrDefault(r => r.Token == token && !r.IsRevoked);
         }
 
         public User? GetUserByUsername(string username)
         {
             return _context.Users.FirstOrDefault(u => u.UName == username);
+        }
+
+        public void DeleteRefreshToken(string token)
+        {
+            var refreshToken = _context.RefreshTokens.FirstOrDefault(rt => rt.Token == token);
+            if (refreshToken != null)
+            {
+                _context.RefreshTokens.Remove(refreshToken);
+                _context.SaveChanges();
+            }
         }
     }
 }

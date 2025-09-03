@@ -84,6 +84,15 @@ namespace E_CommerceSystem.Services
             if (existingProduct == null)
                 throw new KeyNotFoundException($"Product with ID {product.PID} not found.");
 
+            try
+            {
+                _productRepo.UpdateProduct(product);
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new InvalidOperationException("This product was updated by another user. Please refresh and try again.");
+            }
+
             _productRepo.UpdateProduct(product);
         }
 
