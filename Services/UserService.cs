@@ -1,5 +1,6 @@
 ﻿using E_CommerceSystem.Models;
 using E_CommerceSystem.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_CommerceSystem.Services
 {
@@ -16,6 +17,7 @@ namespace E_CommerceSystem.Services
         {
             _userRepo.AddUser(user);
         }
+
         public void DeleteUser(int uid)
         {
             var user = _userRepo.GetUserById(uid);
@@ -52,7 +54,31 @@ namespace E_CommerceSystem.Services
 
             _userRepo.UpdateUser(user);
         }
-    }
 
+        public User? GetUserByUsername(string username)
+        {
+            return _userRepo.GetUserByUsername(username);
+        }
+
+        public void RegisterUser(string username, string password)
+        {
+            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(password);
+            var user = new User
+            {
+                UName = username,
+                PasswordHash = hashedPassword
+            };
+            _userRepo.AddUser(user);
+        }
+
+        public bool VerifyUser(string username, string password)
+        {
+            var user = _userRepo.GetUserByUsername(username);
+            if (user == null) return false;
+
+            bool verified = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
+            return verified;
+        }
+    }
 }
 

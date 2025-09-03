@@ -38,5 +38,7 @@ namespace E_CommerceSystem.Models
         [JsonIgnore]
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
 
+        public string PasswordHash { get; set; }
+
     }
 }

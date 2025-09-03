@@ -121,5 +121,10 @@ namespace E_CommerceSystem.Repositories
         {
             return _context.RefreshTokens.FirstOrDefault(r => r.Token == token && !r.IsRevoked);
         }
+
+        public User? GetUserByUsername(string username)
+        {
+            return _context.Users.FirstOrDefault(u => u.UName == username);
+        }
     }
 }
