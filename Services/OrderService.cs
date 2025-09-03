@@ -104,10 +104,10 @@ namespace E_CommerceSystem.Services
             var items = new List<OrdersOutputOTD>();
             var order = _orderRepo.GetOrderById(oid);
 
-            if (order == null || order.UID != uid)
-                throw new InvalidOperationException("Order not found for this user.");
+            if (order.Status == OrderStatus.Cancelled)
+                throw new InvalidOperationException("Order is already cancelled.");
 
-            var orderProducts = _orderProductsService.GetOrdersByOrderId(oid);
+            var orderProducts = _orderProductsService.GetOrdersByOrderId(OID);
 
             foreach (var op in orderProducts)
             {
@@ -133,7 +133,17 @@ namespace E_CommerceSystem.Services
 
             return orders;
         }
-        //
+
+        public void UpdateOrderStatus(int orderId, OrderStatus status)
+        {
+            var order = _orderRepo.GetOrderById(orderId);
+            if (order == null)
+                throw new KeyNotFoundException($"Order with ID {orderId} not found.");
+
+            order.Status = status;
+            _orderRepo.UpdateOrder(order);
+        }
+
         public void DeleteOrder(int oid)
         {
             var order = _orderRepo.GetOrderById(oid);
@@ -204,7 +214,8 @@ namespace E_CommerceSystem.Services
             if (order == null)
                 throw new ArgumentNullException(nameof(order));
 
-            _orderRepo.AddOrder(order);
+            order.Status = OrderStatus.Cancelled;
+            _orderRepo.UpdateOrder(order);
         }
 
     }

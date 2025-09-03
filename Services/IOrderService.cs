@@ -11,6 +11,7 @@ namespace E_CommerceSystem.Services
         List<OrderProducts> GetAllOrders(int uid);               // Get all order products for a user
         void AddOrder(Order order);
         void UpdateOrder(Order order);
-        void DeleteOrder(int oid);
+        void PlaceOrder(List<OrderItemDTO> items, int uid);
+        void UpdateOrderStatus(int orderId, OrderStatus status);
     }
 }

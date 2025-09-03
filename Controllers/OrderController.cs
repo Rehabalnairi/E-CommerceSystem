@@ -101,5 +101,49 @@ namespace E_CommerceSystem.Controllers
             }
             throw new UnauthorizedAccessException("Invalid or unreadable token.");
         }
+
+        [HttpPut("{orderId}/status")]
+        public IActionResult UpdateOrderStatus(int orderId, [FromBody] OrderStatus status)
+        {
+            try
+            {
+                _orderService.UpdateOrderStatus(orderId, status);
+                return Ok($"Order {orderId} status updated to {status}");
+            }
+            catch (KeyNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
+
+        [ApiController]
+        [Route("api/[controller]")]
+        public class OrdersController : ControllerBase
+        {
+            private readonly IInvoiceService _invoiceService;
+
+            public OrdersController(IInvoiceService invoiceService)
+            {
+                _invoiceService = invoiceService;
+            }
+
+            [HttpGet("{orderId}/invoice")]
+            public IActionResult GetInvoice(int orderId)
+            {
+                try
+                {
+                    var pdfBytes = _invoiceService.GenerateInvoicePdf(orderId);
+                    return File(pdfBytes, "application/pdf", $"Invoice_{orderId}.pdf");
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, ex.Message);
+                }
+            }
+        }
     }
 }
