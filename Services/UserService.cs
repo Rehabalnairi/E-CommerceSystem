@@ -79,6 +79,7 @@ namespace E_CommerceSystem.Services
             bool verified = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
             return verified;
         }
+        // Refresh Token methods
         public RefreshToken GenerateRefreshToken(User user)
         {
             var refreshToken = new RefreshToken
@@ -92,7 +93,7 @@ namespace E_CommerceSystem.Services
             _userRepo.AddRefreshToken(refreshToken);
             return refreshToken;
         }
-
+        // Validate Refresh Token
         public User ValidateRefreshToken(string token)
         {
             var refreshToken = _userRepo.GetRefreshToken(token);

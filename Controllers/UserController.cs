@@ -148,9 +148,9 @@ namespace E_CommerceSystem.Controllers
                 return Unauthorized("Invalid credentials");
 
             var jwtToken = GenerateJwtToken(user.UID.ToString(), user.UName, user.Role);
-            var refreshToken = _userService.GenerateRefreshToken(user);
+            var refreshToken = _userService.GenerateRefreshToken(user);//generate refresh token
 
-          
+
             Response.Cookies.Append("jwtToken", jwtToken, new CookieOptions
             {
                 HttpOnly = true,       
