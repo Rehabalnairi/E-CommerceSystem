@@ -8,7 +8,7 @@ namespace E_CommerceSystem.Services
         IEnumerable<OrdersOutputOTD> GetOrderById(int oid, int uid);
         IEnumerable<Order> GetOrderByUserId(int uid);
         void DeleteOrder(int oid);
-
+        void CanselOrder(int oid);//cansel order
         void AddOrder(Order order);
         void UpdateOrder(Order order);
        void PlaceOrder(List<OrderItemDTO> items, int uid);

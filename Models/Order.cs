@@ -19,5 +19,10 @@ namespace E_CommerceSystem.Models
 
         [JsonIgnore]
         public virtual ICollection <OrderProducts> OrderProducts { get; set; }
+
+        [Required]
+        [MaxLength(20)]
+        public string Status { get; set; } = "Pending";
+
     }
 }
