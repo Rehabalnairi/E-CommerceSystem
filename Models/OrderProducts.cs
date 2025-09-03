@@ -19,6 +19,8 @@ namespace E_CommerceSystem.Models
         [JsonIgnore]
         public Order Order { get; set; }
 
+        public decimal Price { get; set; }   
+
         
         [ForeignKey("Product")]
         public int PID { get; set; }

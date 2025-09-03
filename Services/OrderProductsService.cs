@@ -38,5 +38,10 @@ namespace E_CommerceSystem.Services
        
             return _orderProductsRepo.GetOrdersByOrderId(oid);
         }
+        public IEnumerable<OrderProducts> GetAllOrderProducts()
+        {
+            return _orderProductsRepo.GetAllOrderProducts();
+        }
+
     }
 }

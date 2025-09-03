@@ -45,7 +45,7 @@ namespace E_CommerceSystem.Services
       
         public IEnumerable<Product> GetTopRatedProducts(int top = 10)
         {
-            return _productService.GetAllProducts()
+            return _productService.GetAllProducts(1,top)
                 .OrderByDescending(p => p.OverallRating)
                 .Take(top)
                 .ToList();

@@ -8,7 +8,8 @@ namespace E_CommerceSystem.Repositories
         void AddOrderProducts(OrderProducts orderProduct);
         IEnumerable<OrderProducts> GetAllOrders();
         List<OrderProducts> GetOrdersByOrderId(int oid);
-       
+
+        IEnumerable<OrderProducts> GetAllOrderProducts();
 
 
     }

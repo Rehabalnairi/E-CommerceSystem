@@ -8,6 +8,10 @@ namespace E_CommerceSystem.Services
         IEnumerable<OrderProducts> GetAllOrders();
         IEnumerable<OrderProducts> GetProductsByOrderId(int oid);
         List<OrderProducts> GetOrdersByOrderId(int oid);
-      
+        IEnumerable<OrderProducts> GetAllOrderProducts();
+       // IEnumerable<Product> GetAllProducts(int pageNumber, int pageSize, string? name = null, decimal? minPrice = null, decimal? maxPrice = null);
+
+        // IEnumerable<OrderProducts> GetOrdersByOrderId(int orderId);
+
     }
 }
