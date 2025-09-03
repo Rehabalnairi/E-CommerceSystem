@@ -28,6 +28,7 @@ public class AutoMapperProfile : Profile
             .ForMember(dest => dest.ProductName, opt => opt.MapFrom(src => src.product.ProductName))
             .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
 
+
     }
 }
 

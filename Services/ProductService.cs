@@ -1,7 +1,5 @@
 ﻿using E_CommerceSystem.Models;
 using E_CommerceSystem.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using System.Security.Cryptography;
 
 namespace E_CommerceSystem.Services
 {
@@ -14,11 +12,10 @@ namespace E_CommerceSystem.Services
             _productRepo = productRepo;
         }
 
-
         public IEnumerable<Product> GetAllProducts(int pageNumber, int pageSize, string? name = null, decimal? minPrice = null, decimal? maxPrice = null)
         {
             // Base query
-            var query = _productRepo.GetAllProducts();
+            var query = _productRepo.GetAllProducts().AsQueryable();
 
             // Apply filters
             if (!string.IsNullOrEmpty(name))
@@ -37,15 +34,13 @@ namespace E_CommerceSystem.Services
             }
 
             // Pagination
-            var pagedProducts = query
+            return query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
+        }
 
-            return pagedProducts;
-        
-    }
-         public Product GetProductById(int pid)
+        public Product GetProductById(int pid)
         {
             var product = _productRepo.GetProductById(pid);
             if (product == null)
@@ -60,7 +55,6 @@ namespace E_CommerceSystem.Services
 
         public void UpdateProduct(Product product)
         {
-
             var existingProduct = _productRepo.GetProductById(product.PID);
             if (existingProduct == null)
                 throw new KeyNotFoundException($"Product with ID {product.PID} not found.");
@@ -72,7 +66,7 @@ namespace E_CommerceSystem.Services
         {
             var product = _productRepo.GetProductByName(productName);
             if (product == null)
-                throw new KeyNotFoundException($"Product with Nmae {productName} not found.");
+                throw new KeyNotFoundException($"Product with Name {productName} not found.");
             return product;
         }
     }
