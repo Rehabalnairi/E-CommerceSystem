@@ -11,6 +11,19 @@ namespace E_CommerceSystem.Services
         public IProductService _productService;
         public IOrderService _orderService;
         public IOrderProductsService _orderProductsService;
+//
+        private readonly IOrderRepo _orderRepo;  
+
+        public ReviewService(IReviewRepo reviewRepo, IProductService productService, IOrderProductsService orderProductsService, IOrderService orderService, IOrderRepo orderRepo)
+        {
+            _reviewRepo = reviewRepo;
+            _productService = productService;
+            _orderProductsService = orderProductsService;
+            _orderService = orderService;
+            _orderRepo = orderRepo;
+        }
+
+
         public ReviewService(IReviewRepo reviewRepo, IProductService productService, IOrderProductsService orderProductsService, IOrderService orderService)
         {
             _reviewRepo = reviewRepo;
@@ -122,6 +135,36 @@ namespace E_CommerceSystem.Services
 
             // Save the updated product
             _productService.UpdateProduct(product);
+        }
+
+        private bool HasPurchasedProduct(int userId, int productId)
+        {
+            var orders = _orderRepo.GetAllOrdersByUserId(userId);
+            foreach (var order in orders)
+            {
+                var products = _orderProductsService.GetOrdersByOrderId(order.OID);
+                if (products.Any(p => p.PID == productId))
+                    return true;
+            }
+            return false;
+        }
+
+        private bool AlreadyReviewed(int userId, int productId)
+        {
+            var reviews = _reviewRepo.GetReviewsByProductId(productId);
+            return reviews.Any(r => r.UID == userId);
+        }
+
+       
+        public void AddReview(Review review)
+        {
+            if (!HasPurchasedProduct(review.UID, review.PID))
+                throw new InvalidOperationException("You can only review products you purchased.");
+
+            if (AlreadyReviewed(review.UID, review.PID))
+                throw new InvalidOperationException("You have already reviewed this product.");
+
+            _reviewRepo.AddReview(review);
         }
     }
 }

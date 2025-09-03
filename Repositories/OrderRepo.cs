@@ -104,5 +104,10 @@ namespace E_CommerceSystem.Repositories
             }
         }
 
+        public IEnumerable<Order> GetAllOrdersByUserId(int userId)
+        {
+            return _context.Orders.Where(o => o.UID == userId).ToList();
+        }
+
     }
 }

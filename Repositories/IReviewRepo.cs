@@ -11,5 +11,9 @@ namespace E_CommerceSystem.Repositories
         void UpdateReview(Review review);
         Review GetReviewsByProductIdAndUserId(int pid, int uid);
         IEnumerable<Review> GetReviewByProductId(int pid);
+        IEnumerable<Review> GetReviewsByProductId(int productId);
+       
+
+
     }
 }

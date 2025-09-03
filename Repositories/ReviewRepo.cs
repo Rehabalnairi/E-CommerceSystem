@@ -101,5 +101,12 @@ namespace E_CommerceSystem.Repositories
                 throw new InvalidOperationException($"Database error: {ex.Message}");
             }
         }
+        public IEnumerable<Review> GetReviewsByProductId(int productId)
+        {
+            return _context.Reviews.Where(r => r.PID == productId).ToList();
+        }
+
+       
+
     }
 }

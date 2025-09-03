@@ -9,6 +9,8 @@ namespace E_CommerceSystem.Repositories
         IEnumerable<Order> GetAllOrders();
         Order GetOrderById(int oid);
         void UpdateOrder(Order order);
+        IEnumerable<Order> GetAllOrdersByUserId(int userId);
+
         IEnumerable<Order> GetOrderByUserId(int uid);
     }
 }

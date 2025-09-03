@@ -16,6 +16,7 @@ namespace E_CommerceSystem.Models
         public string Comment { get; set; } = null;
 
         public DateTime ReviewDate { get; set; }
+        public DateTime CreatedAt { get; set; } 
 
         [ForeignKey("user")]
         public int UID { get; set; }
