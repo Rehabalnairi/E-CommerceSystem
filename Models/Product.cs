@@ -39,5 +39,7 @@ namespace E_CommerceSystem.Models
 
         [JsonIgnore]
         public virtual ICollection<Review> Reviews { get; set; }
+
+        public string ImageUrl { get; set; }
     }
 }

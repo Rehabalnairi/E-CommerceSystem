@@ -1,15 +1,21 @@
-﻿using E_CommerceSystem.Models;
+﻿using AutoMapper;
+using E_CommerceSystem.Models;
 using E_CommerceSystem.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace E_CommerceSystem.Services
 {
     public class ProductService : IProductService
     {
         private readonly IProductRepo _productRepo;
+        private readonly IMapper _mapper;
+        private readonly IWebHostEnvironment _env;
 
-        public ProductService(IProductRepo productRepo)
+        public ProductService(IProductRepo productRepo, IMapper mapper, IWebHostEnvironment env)
         {
             _productRepo = productRepo;
+            _mapper = mapper;
+            _env = env;
         }
 
         public IEnumerable<Product> GetAllProducts(int pageNumber, int pageSize, string? name = null, decimal? minPrice = null, decimal? maxPrice = null)
@@ -37,7 +43,8 @@ namespace E_CommerceSystem.Services
             return query
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
-                .ToList();
+            .ToList();
+
         }
 
         public Product GetProductById(int pid)
@@ -48,9 +55,27 @@ namespace E_CommerceSystem.Services
             return product;
         }
 
-        public void AddProduct(Product product)
+        public ProductDTO AddProduct(ProductCreateDTO dto)
         {
+            var product = _mapper.Map<Product>(dto);
+
+            if (dto.ImageFile != null)
+            {
+                var uploads = Path.Combine(_env.WebRootPath, "uploads");
+                if (!Directory.Exists(uploads)) Directory.CreateDirectory(uploads);
+
+                var fileName = Guid.NewGuid() + Path.GetExtension(dto.ImageFile.FileName);
+                var filePath = Path.Combine(uploads, fileName);
+
+                using var stream = new FileStream(filePath, FileMode.Create);
+                dto.ImageFile.CopyTo(stream);
+
+                product.ImageUrl = "/uploads/" + fileName;
+            }
+
             _productRepo.AddProduct(product);
+
+            return _mapper.Map<ProductDTO>(product);
         }
 
         public void UpdateProduct(Product product)
