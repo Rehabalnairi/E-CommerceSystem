@@ -6,6 +6,7 @@ namespace E_CommerceSystem.Services
     {
         void AddOrderProducts(OrderProducts product);
         IEnumerable<OrderProducts> GetAllOrders();
+        IEnumerable<OrderProducts> GetProductsByOrderId(int oid);
         List<OrderProducts> GetOrdersByOrderId(int oid);
     }
 }

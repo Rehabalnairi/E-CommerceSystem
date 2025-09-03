@@ -82,7 +82,29 @@ namespace E_CommerceSystem.Services
             return items;
      
         }
+        public void CanselOrder(int OID)
+        { 
+            var order = _orderRepo.GetOrderById(OID);
+            if (order == null)
+                throw new KeyNotFoundException($"Order with ID {OID} not found.");
 
+            if (order.Status == OrderStatus.Cancelled)
+                throw new InvalidOperationException("Order is already cancelled.");
+
+            var orderProducts = _orderProductsService.GetOrdersByOrderId(OID);
+
+            foreach (var op in orderProducts)
+            {
+       
+                var product = _productService.GetProductById(op.PID);
+                if (product != null)
+                {
+            
+                    product.Stock += op.Quantity;
+                    _productService.UpdateProduct(product);
+                }
+            }
+        }
         public IEnumerable<Order> GetOrderByUserId(int uid)
         {
             var order = _orderRepo.GetOrderByUserId(uid);
@@ -173,6 +195,8 @@ namespace E_CommerceSystem.Services
             order.TotalAmount = totalOrderPrice;
             UpdateOrder(order);
 
+            order.Status = OrderStatus.Cancelled;
+            _orderRepo.UpdateOrder(order);
         }
     }
 }
