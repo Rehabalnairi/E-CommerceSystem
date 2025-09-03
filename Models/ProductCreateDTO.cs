@@ -2,10 +2,8 @@
 
 namespace E_CommerceSystem.Models
 {
-    public class ProductDTO
+    public class ProductCreateDTO
     {
-        public int PID { get; set; }
-
         [Required]
         public string ProductName { get; set; }
 
@@ -19,9 +17,8 @@ namespace E_CommerceSystem.Models
         [Range(0, int.MaxValue)]
         public int Stock { get; set; }
 
-        public decimal OverallRating { get; set; }
-
         public int CategoryId { get; set; }
-        public string? ImageUrl { get; set; }
+
+        public IFormFile? ImageFile { get; set; } // For image upload
     }
 }

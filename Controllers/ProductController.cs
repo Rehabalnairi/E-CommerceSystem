@@ -24,16 +24,14 @@ namespace E_CommerceSystem.Controllers
         // for athentication and authorization
         [Authorize(Roles = "admin")]
         [HttpPost("AddProduct")]
-        public IActionResult AddNewProduct(ProductDTO productInput)
+        public IActionResult AddNewProduct(ProductCreateDTO productInput)
         {
             if (productInput == null)
                 return BadRequest("Product data is required.");
 
             // use AutoMapper to map DTO to Model
             var product = _mapper.Map<Product>(productInput);
-            product.OverallRating = 0;
-
-            _productService.AddProduct(product);
+            _productService.AddProduct(productInput);
             return Ok(product);
         }
 
@@ -94,5 +92,20 @@ namespace E_CommerceSystem.Controllers
             var productDto = _mapper.Map<ProductDTO>(product);
             return Ok(productDto);
         }
+
+        [HttpPost("CreateProduct")]
+        public IActionResult CreateProduct([FromForm] ProductCreateDTO dto)
+        {
+            try
+            {
+                var product = _productService.AddProduct(dto);
+                return Ok(product);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
     }
 }
