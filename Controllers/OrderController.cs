@@ -144,5 +144,31 @@ namespace E_CommerceSystem.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+
+        [ApiController]
+        [Route("api/[controller]")]
+        public class OrdersController : ControllerBase
+        {
+            private readonly IInvoiceService _invoiceService;
+
+            public OrdersController(IInvoiceService invoiceService)
+            {
+                _invoiceService = invoiceService;
+            }
+
+            [HttpGet("{orderId}/invoice")]
+            public IActionResult GetInvoice(int orderId)
+            {
+                try
+                {
+                    var pdfBytes = _invoiceService.GenerateInvoicePdf(orderId);
+                    return File(pdfBytes, "application/pdf", $"Invoice_{orderId}.pdf");
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, ex.Message);
+                }
+            }
+        }
     }
 }
