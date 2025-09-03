@@ -24,7 +24,11 @@ namespace E_CommerceSystem
                         .HasIndex(u => u.Email)
                         .IsUnique();
 
-        }
 
+            modelBuilder.Entity<Product>()
+                .Property(p => p.RowVersion)
+                .IsRowVersion();
+
+        }
     }
 }
