@@ -56,7 +56,7 @@ namespace E_CommerceSystem.Services
                 UID = uid,
                 OrderDate = DateTime.Now,
                 TotalAmount = 0,
-                Status = "Placed"
+                Status = OrderStatus.Pending
             };
             _orderRepo.AddOrder(order); // Save order to get OID
 
@@ -104,10 +104,13 @@ namespace E_CommerceSystem.Services
             var items = new List<OrdersOutputOTD>();
             var order = _orderRepo.GetOrderById(oid);
 
+            if (order == null)
+                throw new KeyNotFoundException($"Order with ID {oid} not found.");
+
             if (order.Status == OrderStatus.Cancelled)
                 throw new InvalidOperationException("Order is already cancelled.");
 
-            var orderProducts = _orderProductsService.GetOrdersByOrderId(OID);
+            var orderProducts = _orderProductsService.GetOrdersByOrderId(order.OID);
 
             foreach (var op in orderProducts)
             {
@@ -160,7 +163,7 @@ namespace E_CommerceSystem.Services
             if (order == null)
                 throw new KeyNotFoundException($"Order with ID {oid} not found.");
 
-            if (order.Status == "Cancelled")
+            if (order.Status == OrderStatus.Cancelled)
                 throw new InvalidOperationException("Order is already cancelled.");
 
             // Restore stock
@@ -178,7 +181,7 @@ namespace E_CommerceSystem.Services
 
 
             // Update order status
-            order.Status = "Cancelled";
+            order.Status = OrderStatus.Cancelled;
             _orderRepo.UpdateOrder(order);
 
             // Send email notification
