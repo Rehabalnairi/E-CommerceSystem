@@ -126,12 +126,12 @@ namespace E_CommerceSystem.Controllers
         [HttpPost("refresh-token")]
         public IActionResult RefreshToken([FromBody] string refreshToken)
         {
-            var user = _authService.ValidateRefreshToken(refreshToken); // ✅ من AuthService
+            var user = _authService.ValidateRefreshToken(refreshToken); // 
             if (user == null)
                 return Unauthorized("Invalid refresh token");
 
-            var newJwt = _authService.GenerateJwtToken(user);          // ✅ من AuthService
-            var newRefreshToken = _authService.GenerateRefreshToken(user); // ✅ من AuthService
+            var newJwt = _authService.GenerateJwtToken(user);          
+            var newRefreshToken = _authService.GenerateRefreshToken(user); 
 
             return Ok(new
             {
@@ -139,7 +139,70 @@ namespace E_CommerceSystem.Controllers
                 RefreshToken = newRefreshToken.Token
             });
         }
+        [AllowAnonymous]
+        [HttpPost("Login")]
+        public IActionResult LoginWithCookies(string email, string password)
+        {
+            var user = _userService.GetUSer(email, password);
+            if (user == null)
+                return Unauthorized("Invalid credentials");
 
+            var jwtToken = GenerateJwtToken(user.UID.ToString(), user.UName, user.Role);
+            var refreshToken = _userService.GenerateRefreshToken(user);//generate refresh token
+
+
+            Response.Cookies.Append("jwtToken", jwtToken, new CookieOptions
+            {
+                HttpOnly = true,       
+                Secure = true,       
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddMinutes(30)
+            });
+
+         
+            Response.Cookies.Append("refreshToken", refreshToken.Token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = refreshToken.Expires
+            });
+
+            return Ok(new { Message = "Logged in successfully" });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("refresh-token")]
+        public IActionResult RefreshToken()
+        {
+            if (!Request.Cookies.TryGetValue("refreshToken", out var refreshToken))
+                return Unauthorized("Refresh token missing");
+
+            var user = _userService.ValidateRefreshToken(refreshToken);
+            if (user == null)
+                return Unauthorized("Invalid refresh token");
+
+            var newJwt = GenerateJwtToken(user.UID.ToString(), user.UName, user.Role);
+            var newRefreshToken = _userService.GenerateRefreshToken(user);
+
+            Response.Cookies.Append("jwtToken", newJwt, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTime.UtcNow.AddMinutes(30)
+            });
+
+            Response.Cookies.Append("refreshToken", newRefreshToken.Token, new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = true,
+                SameSite = SameSiteMode.Strict,
+                Expires = newRefreshToken.Expires
+            });
+
+            return Ok(new { Message = "Token refreshed successfully" });
+        }
 
 
     }

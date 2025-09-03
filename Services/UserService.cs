@@ -79,6 +79,30 @@ namespace E_CommerceSystem.Services
             bool verified = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
             return verified;
         }
+        // Refresh Token methods
+        public RefreshToken GenerateRefreshToken(User user)
+        {
+            var refreshToken = new RefreshToken
+            {
+                Token = Guid.NewGuid().ToString(),
+                Expires = DateTime.UtcNow.AddDays(7),
+                UID = user.UID,
+                IsRevoked = false
+            };
+
+            _userRepo.AddRefreshToken(refreshToken);
+            return refreshToken;
+        }
+        // Validate Refresh Token
+        public User ValidateRefreshToken(string token)
+        {
+            var refreshToken = _userRepo.GetRefreshToken(token);
+            if (refreshToken == null || refreshToken.Expires < DateTime.UtcNow || refreshToken.IsRevoked)
+                return null;
+
+            return _userRepo.GetUserById(refreshToken.UID);
+        }
+
 
         public void SaveRefreshToken(int userId, string token, DateTime expires)
         {
