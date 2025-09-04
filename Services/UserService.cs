@@ -73,6 +73,7 @@ namespace E_CommerceSystem.Services
                 CreatedAt = DateTime.UtcNow
             };
             _userRepo.AddUser(user);
+            
         }
 
         public bool VerifyUser(string username, string password)
