@@ -2,6 +2,7 @@
 using E_CommerceSystem.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -18,36 +19,44 @@ namespace E_CommerceSystem.Controllers
         private readonly IConfiguration _configuration;
         private readonly IAuthService _authService;
 
-
-        public UserController(IUserService userService, IConfiguration configuration)
+        public UserController(IUserService userService, IAuthService authService, IConfiguration configuration)
         {
             _userService = userService;
-            _authService = _authService;
+            _authService = authService;
             _configuration = configuration;
+ 
         }
 
         [AllowAnonymous]
         [HttpPost("Register")]
         public IActionResult Register(UserDTO InputUser)
+
         {
             try
             {
                 if(InputUser == null)
                     return BadRequest("User data is required");
 
+                var passwordHash = BCrypt.Net.BCrypt.HashPassword(InputUser.Password);
+
                 var user = new User
                 {
                     UName = InputUser.UName,
                     Email = InputUser.Email,
-                    Password = InputUser.Password,
+                    PasswordHash = passwordHash,
                     Role = InputUser.Role,
                     Phone = InputUser.Phone,
-                    CreatedAt = DateTime.Now
+                    CreatedAt = DateTime.Now,
+                    Orders = new List<Order>(),
+                    Reviews = new List<Review>(),
+                    RefreshTokens = new List<RefreshToken>()
+
+
                 };
 
                 _userService.AddUser(user);
 
-                return Ok(user);
+                return Ok(new { message = "User registered successfully." });
             }
             catch (Exception ex)
             {
@@ -141,7 +150,7 @@ namespace E_CommerceSystem.Controllers
             });
         }
         [AllowAnonymous]
-        [HttpPost("Login")]
+        [HttpPost("login-with-cookies")]
         public IActionResult LoginWithCookies(string email, string password)
         {
             var user = _userService.GetUSer(email, password);

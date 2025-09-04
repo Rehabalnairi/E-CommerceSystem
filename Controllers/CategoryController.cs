@@ -38,21 +38,40 @@ namespace E_CommerceSystem.Controllers
         [HttpPost]
         public IActionResult Create(CategoryCreateDTO input)
         {
-            var category = _mapper.Map<Category>(input);
-            _categoryService.AddCategory(category);
-            return Ok(_mapper.Map<CategoryDTO>(category));
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            try
+            {
+                var category = _mapper.Map<Category>(input);
+                _categoryService.AddCategory(category);
+                var result = _mapper.Map<CategoryDTO>(category);
+                return CreatedAtAction(nameof(GetById), new { id = result.CategoryId }, result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error creating category: {ex.Message}");
+            }
         }
 
-        [HttpPut("{id}")]
+            [HttpPut("{id}")]
         public IActionResult Update(int id, CategoryCreateDTO input)
         {
-            var existing = _categoryService.GetCategoryById(id);
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var existing = _categoryService.GetCategoryById(id);
             if (existing == null) return NotFound();
 
-            _mapper.Map(input, existing);
-            _categoryService.UpdateCategory(existing);
-
-            return Ok(_mapper.Map<CategoryDTO>(existing));
+            try
+            {
+                _mapper.Map(input, existing);
+                _categoryService.UpdateCategory(existing);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Error updating category: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]

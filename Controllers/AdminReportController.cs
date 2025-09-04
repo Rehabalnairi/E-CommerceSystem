@@ -20,6 +20,8 @@ namespace E_CommerceSystem.Controllers
         public IActionResult BestSellingProducts()
         {
             var products = _reportService.GetBestSellingProducts();
+            if (products == null || !products.Any())
+                return NotFound("No products found");
             return Ok(products);
         }
 
@@ -31,16 +33,29 @@ namespace E_CommerceSystem.Controllers
         }
 
         [HttpGet("revenue-by-day")]
-        public IActionResult RevenueByDay(DateTime date)
+        public IActionResult RevenueByDay([FromQuery] DateTime date)
         {
+            if (date > DateTime.UtcNow)
+                return BadRequest("Date cannot be in the future");
+
             var revenue = _reportService.GetRevenueReportByDay(date);
+            if (revenue == null)
+                return NotFound("No revenue data for the given date");
+
             return Ok(revenue);
         }
 
         [HttpGet("revenue-by-month")]
-        public IActionResult RevenueByMonth(int month, int year)
+        public IActionResult RevenueByMonth([FromQuery] int month, [FromQuery] int year)
         {
+            if (month < 1 || month > 12)
+                return BadRequest("Month must be between 1 and 12");
+
             var revenue = _reportService.GetRevenueReportByMonth(month, year);
+
+            if (revenue == null)
+                return NotFound("No revenue data for the given month/year");
+
             return Ok(revenue);
         }
 

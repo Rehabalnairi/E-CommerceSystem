@@ -66,7 +66,11 @@ namespace E_CommerceSystem.Services
             var user = new User
             {
                 UName = username,
-                PasswordHash = hashedPassword
+                Email = "",
+                Phone = "",
+                Role = "User",
+                PasswordHash = hashedPassword,
+                CreatedAt = DateTime.UtcNow
             };
             _userRepo.AddUser(user);
         }
@@ -100,7 +104,7 @@ namespace E_CommerceSystem.Services
             return refreshToken;
         }
         // Validate Refresh Token
-        public User? ValidateRefreshToken(string token)
+        public User ValidateRefreshToken(string token)
         {
             var refreshToken = _userRepo.GetRefreshToken(token);
             if (refreshToken == null || refreshToken.Expires < DateTime.UtcNow || refreshToken.IsRevoked)

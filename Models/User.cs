@@ -31,10 +31,10 @@ namespace E_CommerceSystem.Models
         public DateTime CreatedAt { get; set; }
 
         [JsonIgnore]
-        public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 
         [JsonIgnore]
-        public virtual ICollection<Review> Reviews { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
         [JsonIgnore]
         public virtual ICollection<RefreshToken> RefreshTokens { get; set; } = new List<RefreshToken>();
 
