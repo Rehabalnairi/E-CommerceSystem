@@ -41,8 +41,7 @@ namespace E_CommerceSystem.Repositories
         {
             try
             {
-                //Hash the password before saving
-                user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password); 
+             
                 _context.Users.Add(user);
                 _context.SaveChanges();
             }
@@ -145,5 +144,11 @@ namespace E_CommerceSystem.Repositories
                 _context.SaveChanges();
             }
         }
+
+        public User GetUserByEmail(string email)
+        {
+            return _context.Users.FirstOrDefault(u => u.Email == email);
+        }
+
     }
 }

@@ -29,13 +29,32 @@ namespace E_CommerceSystem.Controllers
 
         [AllowAnonymous]
         [HttpPost("Register")]
-        public IActionResult Register(UserDTO InputUser)
+        public IActionResult Register([FromBody] UserDTO InputUser)
 
         {
             try
             {
                 if(InputUser == null)
                     return BadRequest("User data is required");
+
+                if (string.IsNullOrWhiteSpace(InputUser.Password))
+                    return BadRequest("Password is required");
+
+                if (string.IsNullOrWhiteSpace(InputUser.Email))
+                    return BadRequest("Email is required");
+
+                if (string.IsNullOrWhiteSpace(InputUser.UName))
+                    return BadRequest("Username is required");
+
+                if (string.IsNullOrWhiteSpace(InputUser.Phone))
+                    return BadRequest("Phone is required");
+
+                if (string.IsNullOrWhiteSpace(InputUser.Role))
+                    return BadRequest("Role is required");
+
+                var existingUser = _userService.GetUserByEmail(InputUser.Email);
+                if (existingUser != null)
+                    return BadRequest("Email already exists");
 
                 var passwordHash = BCrypt.Net.BCrypt.HashPassword(InputUser.Password);
 
@@ -49,8 +68,6 @@ namespace E_CommerceSystem.Controllers
                     CreatedAt = DateTime.Now,
                     Orders = new List<Order>(),
                     Reviews = new List<Review>(),
-                    RefreshTokens = new List<RefreshToken>()
-
 
                 };
 
@@ -61,6 +78,7 @@ namespace E_CommerceSystem.Controllers
             catch (Exception ex)
             {
                 // Return a generic error response
+                var errorMessage = ex.InnerException?.Message ?? ex.Message;
                 return StatusCode(500, $"An error occurred while adding the user. {ex.Message} ");
             }
         }

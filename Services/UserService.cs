@@ -126,6 +126,12 @@ namespace E_CommerceSystem.Services
 
             _userRepo.AddRefreshToken(refreshToken);
         }
+
+        public User GetUserByEmail(string email)
+        {
+            return _userRepo.GetUserByEmail(email);
+        }
+
     }
 }
 

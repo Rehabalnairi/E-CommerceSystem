@@ -14,5 +14,7 @@ namespace E_CommerceSystem.Services
         RefreshToken GenerateRefreshToken(User user);
         User ValidateRefreshToken(string token);
         IEnumerable<User> GetAllUsersWithTokens();
+        User GetUserByEmail(string email);
+
     }
 }

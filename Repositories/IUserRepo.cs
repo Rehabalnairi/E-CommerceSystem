@@ -15,5 +15,6 @@ namespace E_CommerceSystem.Repositories
         void DeleteRefreshToken(string token);
         User? GetUserByUsername(string username);
         IEnumerable<User> GetAllUsersWithTokens();
+        User GetUserByEmail(string email);
     }
 }
