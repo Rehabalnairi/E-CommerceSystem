@@ -18,7 +18,6 @@ namespace E_CommerceSystem.Models
         [Required]
         public int UID { get; set; }
 
-        [ForeignKey("UId")]
         public User User { get; set; }
         public DateTime Created { get; set; }
         public bool IsExpired => DateTime.UtcNow >= Expires;
