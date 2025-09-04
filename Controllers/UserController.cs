@@ -124,7 +124,7 @@ namespace E_CommerceSystem.Controllers
         //for refresh token
 
         [AllowAnonymous]
-        [HttpPost("refresh-token")]
+        [HttpPost("r")]
         public IActionResult RefreshToken([FromBody] string refreshToken)
         {
             var user = _authService.ValidateRefreshToken(refreshToken); // 
