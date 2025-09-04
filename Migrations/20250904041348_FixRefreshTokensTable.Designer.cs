@@ -4,6 +4,7 @@ using E_CommerceSystem;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace E_CommerceSystem.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250904041348_FixRefreshTokensTable")]
+    partial class FixRefreshTokensTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -165,12 +168,9 @@ namespace E_CommerceSystem.Migrations
                     b.Property<int>("UID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserUID")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("UserUID");
+                    b.HasIndex("UID");
 
                     b.ToTable("RefreshTokens");
                 });
@@ -326,6 +326,17 @@ namespace E_CommerceSystem.Migrations
                     b.Navigation("category");
 
                     b.Navigation("supplier");
+                });
+
+            modelBuilder.Entity("E_CommerceSystem.Models.RefreshToken", b =>
+                {
+                    b.HasOne("E_CommerceSystem.Models.User", "User")
+                        .WithMany("RefreshTokens")
+                        .HasForeignKey("UID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("E_CommerceSystem.Models.Review", b =>
