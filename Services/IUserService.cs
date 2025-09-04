@@ -13,5 +13,6 @@ namespace E_CommerceSystem.Services
         User GetUserByUsername(string username);
         RefreshToken GenerateRefreshToken(User user);
         User ValidateRefreshToken(string token);
+        IEnumerable<User> GetAllUsersWithTokens();
     }
 }

@@ -107,6 +107,7 @@ namespace E_CommerceSystem.Controllers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 
             };
+            var users = _userService.GetAllUsersWithTokens();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -204,6 +205,11 @@ namespace E_CommerceSystem.Controllers
             return Ok(new { Message = "Token refreshed successfully" });
         }
 
-
+        [HttpGet("with-tokens")]
+        public IActionResult GetUsersWithTokens()
+        {
+            var users = _userService.GetAllUsersWithTokens();
+            return Ok(users);
+        }
     }
 }

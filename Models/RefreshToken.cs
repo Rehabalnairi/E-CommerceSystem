@@ -16,10 +16,11 @@ namespace E_CommerceSystem.Models
 
         public bool IsRevoked { get; set; } = false;
 
-        // Use UserId as FK (avoid duplicate UID)
+        // Use UserId as FK 
         [Required]
-        public int UserId { get; set; }
+        public int UID { get; set; }
 
+        [ForeignKey("UID")]
         public User User { get; set; }
 
         public DateTime Created { get; set; }

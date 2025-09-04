@@ -111,6 +111,13 @@ namespace E_CommerceSystem.Repositories
             }
         }
 
+        public IEnumerable<User> GetAllUsersWithTokens()
+        {
+            return _context.Users
+                           .Include(u => u.RefreshTokens) 
+                           .ToList();
+        }
+
         public void AddRefreshToken(RefreshToken token)
         {
             _context.RefreshTokens.Add(token);

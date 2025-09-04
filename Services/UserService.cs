@@ -79,6 +79,12 @@ namespace E_CommerceSystem.Services
             bool verified = BCrypt.Net.BCrypt.Verify(password, user.PasswordHash);
             return verified;
         }
+
+        public IEnumerable<User> GetAllUsersWithTokens()
+        {
+            return _userRepo.GetAllUsersWithTokens();
+        }
+
         // Refresh Token methods
         public RefreshToken GenerateRefreshToken(User user)
         {
@@ -94,7 +100,7 @@ namespace E_CommerceSystem.Services
             return refreshToken;
         }
         // Validate Refresh Token
-        public User ValidateRefreshToken(string token)
+        public User? ValidateRefreshToken(string token)
         {
             var refreshToken = _userRepo.GetRefreshToken(token);
             if (refreshToken == null || refreshToken.Expires < DateTime.UtcNow || refreshToken.IsRevoked)

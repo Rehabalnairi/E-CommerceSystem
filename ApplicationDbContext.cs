@@ -29,6 +29,11 @@ namespace E_CommerceSystem
                 .Property(p => p.RowVersion)
                 .IsRowVersion();
 
+            modelBuilder.Entity<User>()
+                .HasMany(u => u.RefreshTokens)
+                .WithOne(rt => rt.User)
+                .HasForeignKey(rt => rt.UID);
+
         }
     }
 }
