@@ -13,14 +13,18 @@ namespace E_CommerceSystem.Models
 
         [Required]
         public DateTime Expires { get; set; }
+
         public bool IsRevoked { get; set; } = false;
 
+        // Use UserId as FK (avoid duplicate UID)
         [Required]
-        public int UID { get; set; }
+        public int UserId { get; set; }
 
-        [ForeignKey("UId")]
         public User User { get; set; }
+
         public DateTime Created { get; set; }
+
+        [NotMapped]
         public bool IsExpired => DateTime.UtcNow >= Expires;
     }
 }
